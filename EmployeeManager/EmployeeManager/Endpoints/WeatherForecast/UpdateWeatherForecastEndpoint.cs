@@ -1,4 +1,5 @@
-﻿using EmployeeManager.WeatherForecasts;
+﻿using EmployeeManager.Filters;
+using EmployeeManager.WeatherForecasts;
 
 namespace EmployeeManager.Endpoints.WeatherForecast;
 
@@ -8,7 +9,8 @@ public static class UpdateWeatherForecastEndpoint
     {
         builder
             .MapPut("/weatherforecast/{id}", UpdateWeatherForecast)
-            .WithTags("Weather Forecast")
+            .WithRequestValidation<UpdateWeatherForecastRequest>()
+			.WithTags("Weather Forecast")
             .WithOpenApi();
 
         return builder;
@@ -29,5 +31,5 @@ public class UpdateWeatherForecastRequest
 {
     public int TemperatureC { get; set; }
 
-    public string Summary { get; set; }
+	public string Summary { get; set; }
 }
