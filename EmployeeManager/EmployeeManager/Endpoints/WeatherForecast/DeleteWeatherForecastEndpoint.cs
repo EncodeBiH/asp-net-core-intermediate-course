@@ -7,9 +7,7 @@ public static class DeleteWeatherForecastEndpoint
     public static IEndpointRouteBuilder MapDeleteWeatherForecastEndpoint(this IEndpointRouteBuilder builder)
     {
         builder
-            .MapDelete("/weatherforecast/{id}", DeleteWeatherForecast)
-            .WithTags("Weather Forecast")
-            .WithOpenApi();
+            .MapDelete("/weatherforecast/{id}", DeleteWeatherForecast);
 
         return builder;
     }

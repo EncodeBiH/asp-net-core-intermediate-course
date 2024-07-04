@@ -9,9 +9,7 @@ public static class UpdateWeatherForecastEndpoint
     {
         builder
             .MapPut("/weatherforecast/{id}", UpdateWeatherForecast)
-            .WithRequestValidation<UpdateWeatherForecastRequest>()
-			.WithTags("Weather Forecast")
-            .WithOpenApi();
+            .WithRequestValidation<UpdateWeatherForecastRequest>();
 
         return builder;
     }

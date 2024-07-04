@@ -7,9 +7,7 @@ public static class GetWeatherForecastByIdEndpoint
     public static IEndpointRouteBuilder MapGetWeatherForecastByIdEndpoint(this IEndpointRouteBuilder builder)
     {
         builder
-            .MapGet("/weatherforecast/{id}", GetWeatherForecastById)
-            .WithTags("Weather Forecast")
-            .WithOpenApi();
+            .MapGet("/weatherforecast/{id}", GetWeatherForecastById);
 
         return builder;
     }

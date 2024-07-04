@@ -8,8 +8,7 @@ public static class GetWeatherForecastEndpoint
     {
         builder
             .MapGet("/weatherforecast", GetWeatherForecast)
-            .WithTags("Weather Forecast")
-            .WithOpenApi();
+            .RequireAuthorization(x => x.RequireAuthenticatedUser());
 
         return builder;
     }
