@@ -8,6 +8,11 @@ public static class WeatherForecastsStore
     ];
 }
 
+public static class TokenStore
+{
+  public static List<string> Store = [];
+}
+
 public class WeatherForecast
 {
     public DateOnly Date { get; set; }

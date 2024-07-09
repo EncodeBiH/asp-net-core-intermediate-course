@@ -7,7 +7,7 @@ public static class GetWeatherForecastEndpoint
     public static IEndpointRouteBuilder MapGetWeatherForecastEndpoint(this IEndpointRouteBuilder builder)
     {
         builder
-            .MapGet("/weatherforecast", GetWeatherForecast)
+            .MapGet("/api/weatherforecast", GetWeatherForecast)
             .RequireAuthorization(x => x.RequireAuthenticatedUser());
 
         return builder;

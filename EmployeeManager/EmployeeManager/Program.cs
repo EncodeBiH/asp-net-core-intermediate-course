@@ -1,6 +1,7 @@
 using System.Text;
 using EmployeeManager.Endpoints.Auth;
 using EmployeeManager.Endpoints.WeatherForecast;
+using EmployeeManager.Services;
 using EmployeeManager.Validators;
 using FluentValidation;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
@@ -28,6 +29,7 @@ builder
 			ValidIssuer = builder.Configuration.GetValue<string>("JWT:Issuer"),
 			ValidateAudience = false,
 			ValidateLifetime = true,
+			ClockSkew = TimeSpan.Zero,
 			ValidateIssuerSigningKey = true,
 			IssuerSigningKey =
 				new SymmetricSecurityKey(
@@ -38,6 +40,10 @@ builder
 builder
 	.Services
 	.AddAuthorization();
+
+builder
+  .Services
+  .AddScoped<IAccessTokenService, AccessTokenService>();
 
 var app = builder.Build();
 
@@ -57,7 +63,8 @@ app
 
 // Auth Endpoints
 app
-	.MapLoginEndpoint();
+	.MapLoginEndpoint()
+  .MapRefreshTokenEndpoint();
 
 // Weather forecast endpoints
 app

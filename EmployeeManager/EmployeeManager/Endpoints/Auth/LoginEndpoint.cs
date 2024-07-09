@@ -1,6 +1,8 @@
 ﻿using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
+using EmployeeManager.Services;
+using EmployeeManager.WeatherForecasts;
 using Microsoft.IdentityModel.Tokens;
 using JwtRegisteredClaimNames = Microsoft.IdentityModel.JsonWebTokens.JwtRegisteredClaimNames;
 
@@ -16,46 +18,18 @@ public static class LoginEndpoint
 		return builder;
 	}
 
-	private static IResult Login(LoginRequest request, IConfiguration configuration)
-	{
-		var claims = new Dictionary<string, object>()
-		{
-			{JwtRegisteredClaimNames.Sub, "Emir Veledar"},
-			{JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString("D")}
-		};
+	private static IResult Login(LoginRequest request, IAccessTokenService accessTokenService)
+  {
+    var jwtToken = accessTokenService.GetAccessToken();
 
-		//var securityToken = new SecurityTokenDescriptor()
-		//{
-		//	Issuer = configuration.GetValue<string>("JWT:Issuer"),
-		//	Expires = DateTime.UtcNow.AddMinutes(10),
-		//	IssuedAt = DateTime.UtcNow,
-		//	Claims = claims,
-		//	SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(
-		//		Encoding.UTF8.GetBytes(configuration.GetValue<string>("JWT:SecurityKey"))), SecurityAlgorithms.HmacSha256Signature)
-		//};
-		//var tokenHandler = new JwtSecurityTokenHandler();
-		//var jwtsecurityToken = tokenHandler.CreateJwtSecurityToken(securityToken);
+		var refreshToken = Guid.NewGuid().ToString("D");
+		TokenStore.Store.Add(refreshToken);
 
-		var jwtSecurityToken = new JwtSecurityToken
-		(
-			issuer: configuration.GetValue<string>("JWT:Issuer"),
-			claims: new List<Claim>()
-			{
-				new(JwtRegisteredClaimNames.Sub, "Emir Veledar"),
-				new(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString("D")),
-				new("Demo", "demo"),
-				new Claim(ClaimTypes.Role, "Admin")
-			},
-			expires: DateTime.UtcNow.AddMinutes(10),
-			notBefore: DateTime.UtcNow,
-			signingCredentials: new SigningCredentials(new SymmetricSecurityKey(
-					Encoding.UTF8.GetBytes(configuration.GetValue<string>("JWT:SecurityKey"))),
-				SecurityAlgorithms.HmacSha256Signature)
-		);
-
-		var jwtToken = new JwtSecurityTokenHandler().WriteToken(jwtSecurityToken);
-
-		return TypedResults.Ok(jwtToken);
+		return TypedResults.Ok(new LoginResult
+    {
+			RefreshToken = refreshToken,
+			AccessToken = jwtToken
+    });
 	}
 }
 
@@ -64,4 +38,11 @@ public class LoginRequest
 	public string Username { get; set; }
 
 	public string Password { get; set; }
+}
+
+public class LoginResult
+{
+  public string AccessToken { get; set; }
+
+  public string RefreshToken { get; set; }
 }

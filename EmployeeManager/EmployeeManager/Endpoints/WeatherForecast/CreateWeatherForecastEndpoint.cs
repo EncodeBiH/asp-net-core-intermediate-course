@@ -8,7 +8,7 @@ public static class CreateWeatherForecastEndpoint
     public static IEndpointRouteBuilder MapCreateWeatherForecastEndpoint(this IEndpointRouteBuilder builder)
     {
         builder
-            .MapPost("/weatherforecast", CreateWeatherForecast)
+            .MapPost("/api/weatherforecast", CreateWeatherForecast)
             .WithRequestValidation<CreateWeatherForecastRequest>();
 
         return builder;
