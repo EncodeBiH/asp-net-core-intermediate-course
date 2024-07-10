@@ -1,4 +1,5 @@
-﻿using EmployeeManager.Filters;
+﻿using EmployeeManager.Extensions;
+using EmployeeManager.Filters;
 using EmployeeManager.WeatherForecasts;
 
 namespace EmployeeManager.Endpoints.WeatherForecast;
@@ -9,7 +10,8 @@ public static class CreateWeatherForecastEndpoint
     {
         builder
             .MapPost("/api/weatherforecast", CreateWeatherForecast)
-            .WithRequestValidation<CreateWeatherForecastRequest>();
+            .WithRequestValidation<CreateWeatherForecastRequest>()
+            .RequireAuthenticatedUser();
 
         return builder;
     }

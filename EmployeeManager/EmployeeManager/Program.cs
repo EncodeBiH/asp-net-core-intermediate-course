@@ -1,10 +1,13 @@
 using System.Text;
+using EmployeeManager.Database;
 using EmployeeManager.Endpoints.Auth;
 using EmployeeManager.Endpoints.WeatherForecast;
 using EmployeeManager.Services;
 using EmployeeManager.Validators;
 using FluentValidation;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -17,6 +20,13 @@ builder.Services.AddSwaggerGen();
 builder
 	.Services
 	.AddValidatorsFromAssembly(typeof(CreateWeatherForecastEndpointValidator).Assembly);
+
+builder
+  .Services
+  .AddDbContext<ApplicationDbContext>(options =>
+  {
+    options.UseSqlServer(builder.Configuration.GetConnectionString("Default"));
+  });
 
 builder
 	.Services
@@ -40,6 +50,11 @@ builder
 builder
 	.Services
 	.AddAuthorization();
+
+builder
+  .Services
+  .AddIdentityApiEndpoints<IdentityUser>()
+  .AddEntityFrameworkStores<ApplicationDbContext>();
 
 builder
   .Services
@@ -73,5 +88,8 @@ app
 	.MapUpdateWeatherForecastEndpoint()
 	.MapDeleteWeatherForecastEndpoint()
 	.MapGetWeatherForecastByIdEndpoint();
+
+app
+  .MapIdentityApi<IdentityUser>();
 
 app.Run();

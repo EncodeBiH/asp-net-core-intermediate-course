@@ -1,4 +1,5 @@
-﻿using EmployeeManager.WeatherForecasts;
+﻿using EmployeeManager.Extensions;
+using EmployeeManager.WeatherForecasts;
 
 namespace EmployeeManager.Endpoints.WeatherForecast;
 
@@ -7,7 +8,8 @@ public static class DeleteWeatherForecastEndpoint
     public static IEndpointRouteBuilder MapDeleteWeatherForecastEndpoint(this IEndpointRouteBuilder builder)
     {
         builder
-            .MapDelete("/api/weatherforecast/{id}", DeleteWeatherForecast);
+            .MapDelete("/api/weatherforecast/{id}", DeleteWeatherForecast)
+            .RequireAuthenticatedUser();
 
         return builder;
     }

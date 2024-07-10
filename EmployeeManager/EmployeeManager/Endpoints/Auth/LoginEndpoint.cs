@@ -18,14 +18,14 @@ public static class LoginEndpoint
 		return builder;
 	}
 
-	private static IResult Login(LoginRequest request, IAccessTokenService accessTokenService)
+	private static IResult Login(LoginEndpointRequest request, IAccessTokenService accessTokenService)
   {
     var jwtToken = accessTokenService.GetAccessToken();
 
 		var refreshToken = Guid.NewGuid().ToString("D");
 		TokenStore.Store.Add(refreshToken);
 
-		return TypedResults.Ok(new LoginResult
+		return TypedResults.Ok(new LoginEndpointResult
     {
 			RefreshToken = refreshToken,
 			AccessToken = jwtToken
@@ -33,14 +33,14 @@ public static class LoginEndpoint
 	}
 }
 
-public class LoginRequest
+public class LoginEndpointRequest
 {
 	public string Username { get; set; }
 
 	public string Password { get; set; }
 }
 
-public class LoginResult
+public class LoginEndpointResult
 {
   public string AccessToken { get; set; }
 
