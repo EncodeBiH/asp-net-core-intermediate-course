@@ -1,10 +1,5 @@
-﻿using System.IdentityModel.Tokens.Jwt;
-using System.Security.Claims;
-using System.Text;
-using EmployeeManager.Services;
+﻿using EmployeeManager.Services;
 using EmployeeManager.WeatherForecasts;
-using Microsoft.IdentityModel.Tokens;
-using JwtRegisteredClaimNames = Microsoft.IdentityModel.JsonWebTokens.JwtRegisteredClaimNames;
 
 namespace EmployeeManager.Endpoints.Auth;
 

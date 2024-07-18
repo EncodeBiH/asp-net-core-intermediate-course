@@ -2,6 +2,7 @@ using System.Text;
 using EmployeeManager.Database;
 using EmployeeManager.Endpoints.Auth;
 using EmployeeManager.Endpoints.WeatherForecast;
+using EmployeeManager.Queries.GetWeatherForecastQuery;
 using EmployeeManager.Services;
 using EmployeeManager.Validators;
 using FluentValidation;
@@ -25,7 +26,9 @@ builder
   .Services
   .AddDbContext<ApplicationDbContext>(options =>
   {
-    options.UseSqlServer(builder.Configuration.GetConnectionString("Default"));
+    options
+      .UseSqlServer(builder.Configuration.GetConnectionString("Default"))
+      .EnableSensitiveDataLogging();
   });
 
 builder
@@ -59,6 +62,10 @@ builder
 builder
   .Services
   .AddScoped<IAccessTokenService, AccessTokenService>();
+
+builder
+  .Services
+  .AddScoped<IGetWeatherForecastQuery, GetWeatherForecastQuery>();
 
 var app = builder.Build();
 

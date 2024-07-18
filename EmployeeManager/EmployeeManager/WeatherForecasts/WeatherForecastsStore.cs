@@ -1,13 +1,5 @@
 ﻿namespace EmployeeManager.WeatherForecasts;
 
-public static class WeatherForecastsStore
-{
-    public static List<WeatherForecast> Store =
-    [
-        new WeatherForecast(DateOnly.FromDateTime(DateTime.Now), 10, "Cold")
-    ];
-}
-
 public static class TokenStore
 {
   public static List<string> Store = [];

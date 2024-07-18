@@ -19,8 +19,8 @@ public class AccessTokenService : IAccessTokenService
   {
     var claims = new Dictionary<string, object>()
     {
-      {JwtRegisteredClaimNames.Sub, "Emir Veledar"},
-      {JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString("D")}
+      { JwtRegisteredClaimNames.Sub, "Emir Veledar" },
+      { JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString("D") }
     };
 
     //var securityToken = new SecurityTokenDescriptor()
@@ -45,7 +45,7 @@ public class AccessTokenService : IAccessTokenService
         new("Demo", "demo"),
         new Claim(ClaimTypes.Role, "Admin")
       },
-    expires: DateTime.UtcNow.AddMinutes(1),
+      expires: DateTime.UtcNow.AddMinutes(1),
       notBefore: DateTime.UtcNow,
       signingCredentials: new SigningCredentials(new SymmetricSecurityKey(
           Encoding.UTF8.GetBytes(_configuration.GetValue<string>("JWT:SecurityKey"))),

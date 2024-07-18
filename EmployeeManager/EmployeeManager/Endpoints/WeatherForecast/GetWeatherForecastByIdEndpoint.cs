@@ -1,4 +1,5 @@
-﻿using EmployeeManager.WeatherForecasts;
+﻿using EmployeeManager.Database;
+using EmployeeManager.WeatherForecasts;
 
 namespace EmployeeManager.Endpoints.WeatherForecast;
 
@@ -12,9 +13,9 @@ public static class GetWeatherForecastByIdEndpoint
         return builder;
     }
 
-    private static WeatherForecasts.WeatherForecast GetWeatherForecastById(Guid id)
+    private static WeatherForecasts.WeatherForecast GetWeatherForecastById(Guid id, ApplicationDbContext context)
     {
-        var forecast = WeatherForecastsStore.Store.FirstOrDefault(x => x.Id == id);
+        var forecast = context.WeatherForecasts.FirstOrDefault(x => x.Id == id);
 
         return forecast;
     }

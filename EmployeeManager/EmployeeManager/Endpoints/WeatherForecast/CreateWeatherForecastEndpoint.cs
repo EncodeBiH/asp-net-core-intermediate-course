@@ -1,4 +1,5 @@
-﻿using EmployeeManager.Extensions;
+﻿using EmployeeManager.Database;
+using EmployeeManager.Extensions;
 using EmployeeManager.Filters;
 using EmployeeManager.WeatherForecasts;
 
@@ -16,11 +17,13 @@ public static class CreateWeatherForecastEndpoint
         return builder;
     }
 
-    private static CreateWeatherForecastResponse CreateWeatherForecast(CreateWeatherForecastRequest request)
+    private static CreateWeatherForecastResponse CreateWeatherForecast(CreateWeatherForecastRequest request, ApplicationDbContext context)
     {
         var forecast = new WeatherForecasts.WeatherForecast(request.Date, request.TemperatureC!.Value, request.Summary);
 
-        WeatherForecastsStore.Store.Add(forecast);
+        context.WeatherForecasts.Add(forecast);
+
+        context.SaveChanges();
 
         return new CreateWeatherForecastResponse(forecast.Id);
     }
