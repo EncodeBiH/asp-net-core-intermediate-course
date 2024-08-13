@@ -1,36 +1,30 @@
-﻿using EmployeeManager.Database;
-using EmployeeManager.Extensions;
-using EmployeeManager.Queries.GetWeatherForecastQuery;
-using Microsoft.EntityFrameworkCore;
+﻿using EmployeeManager.Application;
+using EmployeeManager.Application.Common;
+using EmployeeManager.Application.Features.WeatherForecast.Queries.GetWeatherForecastsQuery;
 
 namespace EmployeeManager.Endpoints.WeatherForecast;
 
-public static class GetWeatherForecastEndpoint
+public static class GetWeatherForecastsEndpoint
 {
   public static IEndpointRouteBuilder MapGetWeatherForecastEndpoint(this IEndpointRouteBuilder builder)
   {
     builder
-        .MapGet("/api/weatherforecast", GetWeatherForecast)
+        .MapGet("/api/weatherforecasts", GetWeatherForecast)
         .RequireAuthorization(x => x.RequireAuthenticatedUser());
 
     return builder;
   }
 
-  private static GetWeatherForecastEndpointResponse GetWeatherForecast(GetWeatherForecastEndpointRequest request, IGetWeatherForecastQuery query)
+  private static async Task<GetWeatherForecastsQueryResult> GetWeatherForecast(GetWeatherForecastEndpointRequest request, IQueryHandler<GetWeatherForecastsQuery, GetWeatherForecastsQueryResult> queryHandler, CancellationToken cancellationToken)
   {
-    var queryResult = query.ExecuteQuery(new GetWeatherForecastQueryRequest
-    {
-      PageNumber = request.PageNumber,
-      PageSize = request.PageSize,
-      SearchTerm = request.SearchTerm,
-      SortBy = request.SortBy,
-      SortOrder = request.SortOrder
-    });
-
-    return new GetWeatherForecastEndpointResponse
-    {
-      WeatherForecasts = queryResult.WeatherForecasts
-    };
+	  return await queryHandler.HandleAsync(new GetWeatherForecastsQuery()
+	  {
+		  PageNumber = request.PageNumber,
+		  PageSize = request.PageSize,
+		  SearchTerm = request.SearchTerm,
+		  SortBy = request.SortBy,
+		  SortOrder = request.SortOrder
+	  }, cancellationToken);
   }
 }
 
@@ -73,5 +67,5 @@ public class GetWeatherForecastEndpointRequest
 
 public class GetWeatherForecastEndpointResponse
 {
-  public PagedList<WeatherForecasts.WeatherForecast> WeatherForecasts { get; set; }
+  public PagedList<Domain.Entities.WeatherForecast.WeatherForecast> WeatherForecasts { get; set; }
 }

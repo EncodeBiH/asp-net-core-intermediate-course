@@ -1,36 +1,42 @@
-﻿using EmployeeManager.Database;
+﻿using EmployeeManager.Application;
+using EmployeeManager.Application.Features.WeatherForecast.Commands.UpdateWeatherForecastCommand;
+using EmployeeManager.Database;
 using EmployeeManager.Filters;
-using EmployeeManager.WeatherForecasts;
 
 namespace EmployeeManager.Endpoints.WeatherForecast;
 
 public static class UpdateWeatherForecastEndpoint
 {
-  public static IEndpointRouteBuilder MapUpdateWeatherForecastEndpoint(this IEndpointRouteBuilder builder)
-  {
-    builder
-        .MapPut("/api/weatherforecast/{id}", UpdateWeatherForecast)
-        .WithRequestValidation<UpdateWeatherForecastRequest>();
+	public static IEndpointRouteBuilder MapUpdateWeatherForecastEndpoint(this IEndpointRouteBuilder builder)
+	{
+		builder
+			.MapPut("/api/weatherforecast/{id}", UpdateWeatherForecast)
+			.WithRequestValidation<UpdateWeatherForecastRequest>();
 
-    return builder;
-  }
+		return builder;
+	}
 
-  private static WeatherForecasts.WeatherForecast UpdateWeatherForecast(Guid id, UpdateWeatherForecastRequest request, ApplicationDbContext context)
-  {
-    var forecast = context.WeatherForecasts.FirstOrDefault(x => x.Id == id);
+	private static async Task<UpdateWeatherForecastCommandResult> UpdateWeatherForecast
+	(
+		Guid id,
+		UpdateWeatherForecastRequest request,
+		ICommandHandler<UpdateWeatherForecastCommand, UpdateWeatherForecastCommandResult> commandHandler
+	)
+	{
+		var result = await commandHandler.HandleAsync(new UpdateWeatherForecastCommand
+		{
+			Id = id,
+			Summary = request.Summary,
+			TemperatureC = request.TemperatureC
+		});
 
-    forecast.Summary = request.Summary;
-    forecast.TemperatureC = request.TemperatureC;
-
-    context.SaveChanges();
-
-    return forecast;
-  }
+		return result;
+	}
 }
 
 public class UpdateWeatherForecastRequest
 {
-  public int TemperatureC { get; set; }
+	public int TemperatureC { get; set; }
 
-  public string Summary { get; set; }
+	public string Summary { get; set; }
 }

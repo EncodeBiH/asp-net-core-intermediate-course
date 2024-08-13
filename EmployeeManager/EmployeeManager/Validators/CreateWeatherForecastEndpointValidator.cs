@@ -3,16 +3,16 @@ using FluentValidation;
 
 namespace EmployeeManager.Validators;
 
-public class CreateWeatherForecastEndpointValidator : AbstractValidator<CreateWeatherForecastRequest>
-{
-    public CreateWeatherForecastEndpointValidator()
-    {
-	    RuleFor(x => x.Summary)
-		    .Cascade(CascadeMode.Stop)
-		    .NotNull()
-		    .NotEmpty();
+//public class CreateWeatherForecastEndpointValidator : AbstractValidator<CreateWeatherForecastRequest>
+//{
+//    public CreateWeatherForecastEndpointValidator()
+//    {
+//	    RuleFor(x => x.Summary)
+//		    .Cascade(CascadeMode.Stop)
+//		    .NotNull()
+//		    .NotEmpty();
 
-	    RuleFor(x => x.TemperatureC)
-		    .NotNull();
-    }
-}
+//	    RuleFor(x => x.TemperatureC)
+//		    .NotNull();
+//    }
+//}

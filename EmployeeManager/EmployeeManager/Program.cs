@@ -1,15 +1,13 @@
-using System.Text;
+using EmployeeManager.Application;
 using EmployeeManager.Database;
 using EmployeeManager.Endpoints.Auth;
 using EmployeeManager.Endpoints.WeatherForecast;
-using EmployeeManager.Queries.GetWeatherForecastQuery;
 using EmployeeManager.Services;
-using EmployeeManager.Validators;
 using FluentValidation;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Identity;
-using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
+using System.Text;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -20,16 +18,7 @@ builder.Services.AddSwaggerGen();
 
 builder
 	.Services
-	.AddValidatorsFromAssembly(typeof(CreateWeatherForecastEndpointValidator).Assembly);
-
-builder
-  .Services
-  .AddDbContext<ApplicationDbContext>(options =>
-  {
-    options
-      .UseSqlServer(builder.Configuration.GetConnectionString("Default"))
-      .EnableSensitiveDataLogging();
-  });
+	.AddValidatorsFromAssembly(typeof(UpdateWeatherForecastRequest).Assembly);
 
 builder
 	.Services
@@ -64,8 +53,8 @@ builder
   .AddScoped<IAccessTokenService, AccessTokenService>();
 
 builder
-  .Services
-  .AddScoped<IGetWeatherForecastQuery, GetWeatherForecastQuery>();
+	.Services
+	.AddApplication(builder.Configuration, "Default");
 
 var app = builder.Build();
 

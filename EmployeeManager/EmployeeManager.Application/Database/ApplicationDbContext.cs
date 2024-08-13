@@ -1,4 +1,4 @@
-﻿using EmployeeManager.WeatherForecasts;
+﻿using EmployeeManager.Domain.Entities.WeatherForecast;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;

@@ -1,45 +1,30 @@
-﻿using EmployeeManager.Database;
+﻿using EmployeeManager.Application;
+using EmployeeManager.Application.Features.WeatherForecast.Commands.CreateWeatherForecastCommand;
 using EmployeeManager.Extensions;
 using EmployeeManager.Filters;
-using EmployeeManager.WeatherForecasts;
 
 namespace EmployeeManager.Endpoints.WeatherForecast;
 
 public static class CreateWeatherForecastEndpoint
 {
-    public static IEndpointRouteBuilder MapCreateWeatherForecastEndpoint(this IEndpointRouteBuilder builder)
-    {
-        builder
-            .MapPost("/api/weatherforecast", CreateWeatherForecast)
-            .WithRequestValidation<CreateWeatherForecastRequest>()
-            .RequireAuthenticatedUser();
+	public static IEndpointRouteBuilder MapCreateWeatherForecastEndpoint(this IEndpointRouteBuilder builder)
+	{
+		builder
+			.MapPost("/api/weatherforecasts", CreateWeatherForecast)
+			.RequireAuthenticatedUser();
 
-        return builder;
-    }
+		return builder;
+	}
 
-    private static CreateWeatherForecastResponse CreateWeatherForecast(CreateWeatherForecastRequest request, ApplicationDbContext context)
-    {
-        var forecast = new WeatherForecasts.WeatherForecast(request.Date, request.TemperatureC!.Value, request.Summary);
+	private static async Task<CreateWeatherForecastCommandResult> CreateWeatherForecast
+	(
+		CreateWeatherForecastCommand request,
+		ICommandHandler<CreateWeatherForecastCommand, CreateWeatherForecastCommandResult> commandHandler,
+		CancellationToken cancellationToken
+	)
+	{
+		var result = await commandHandler.HandleAsync(request, cancellationToken);
 
-        context.WeatherForecasts.Add(forecast);
-
-        context.SaveChanges();
-
-        return new CreateWeatherForecastResponse(forecast.Id);
-    }
-}
-
-
-public class CreateWeatherForecastRequest
-{
-	public DateOnly Date { get; set; }
-
-	public int? TemperatureC { get; set; }
-
-	public string Summary { get; set; }
-}
-
-public class CreateWeatherForecastResponse(Guid id)
-{
-	public Guid Id { get; set; } = id;
+		return result;
+	}
 }

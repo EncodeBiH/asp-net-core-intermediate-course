@@ -1,18 +1,18 @@
 ﻿using System.Linq.Expressions;
-using Azure.Core;
+using Microsoft.EntityFrameworkCore;
 
-namespace EmployeeManager.Extensions;
+namespace EmployeeManager.Application.Common;
 
 public static class QueryExtensions
 {
-  public static PagedList<T> ToPagedList<T>(this IQueryable<T> query, int pageSize, int pageNumber)
+  public static async Task<PagedList<T>> ToPagedListAsync<T>(this IQueryable<T> query, int pageSize, int pageNumber)
   {
     var lastPage = (pageNumber <= 0 ? 1 : pageNumber) - 1;
     var skip = lastPage * pageSize;
 
-    var totalRecords = query.Count();
+    var totalRecords = await query.CountAsync();
 
-    var items = query.Skip(skip).Take(pageSize).ToList();
+    var items = await query.Skip(skip).Take(pageSize).ToListAsync();
 
     decimal totalPages = (decimal)totalRecords / pageSize;
 
