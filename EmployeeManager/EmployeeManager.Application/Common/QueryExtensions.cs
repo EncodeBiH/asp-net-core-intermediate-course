@@ -12,7 +12,10 @@ public static class QueryExtensions
 
     var totalRecords = await query.CountAsync();
 
-    var items = await query.Skip(skip).Take(pageSize).ToListAsync();
+    var items = await query
+	    .Skip(skip)
+	    .Take(pageSize)
+	    .ToListAsync();
 
     decimal totalPages = (decimal)totalRecords / pageSize;
 

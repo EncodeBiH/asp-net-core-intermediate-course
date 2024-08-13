@@ -1,15 +1,14 @@
-﻿using EmployeeManager.Database;
-using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.EntityFrameworkCore;
 
 namespace EmployeeManager.Application.Features.WeatherForecast.Commands.UpdateWeatherForecastCommand;
 
 public class UpdateWeatherForecastCommandHandler : ICommandHandler<UpdateWeatherForecastCommand, UpdateWeatherForecastCommandResult>
 {
-	private readonly ApplicationDbContext _applicationDbContext;
+	private readonly IApplicationDbContext _applicationDbContext;
 
 	public UpdateWeatherForecastCommandHandler
 	(
-		ApplicationDbContext applicationDbContext
+		IApplicationDbContext applicationDbContext
 	)
 	{
 		ArgumentNullException.ThrowIfNull(applicationDbContext);
@@ -17,7 +16,7 @@ public class UpdateWeatherForecastCommandHandler : ICommandHandler<UpdateWeather
 		_applicationDbContext = applicationDbContext;
 	}
 
-	public async Task<UpdateWeatherForecastCommandResult> HandleAsync(UpdateWeatherForecastCommand command, CancellationToken cancellationToken = default)
+	public async Task<UpdateWeatherForecastCommandResult> Handle(UpdateWeatherForecastCommand command, CancellationToken cancellationToken = default)
 	{
 		var entity = await _applicationDbContext
 			.WeatherForecasts

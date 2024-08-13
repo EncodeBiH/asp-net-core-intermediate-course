@@ -1,5 +1,7 @@
-﻿namespace EmployeeManager.Application;
+﻿using MediatR;
 
-public interface IQuery<TReponse>
+namespace EmployeeManager.Application;
+
+public interface IQuery<TReponse> : IRequest<TReponse>
 {
 }

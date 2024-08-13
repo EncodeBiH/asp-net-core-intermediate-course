@@ -1,7 +1,6 @@
-﻿using EmployeeManager.Application;
-using EmployeeManager.Application.Features.WeatherForecast.Commands.CreateWeatherForecastCommand;
+﻿using EmployeeManager.Application.Features.WeatherForecast.Commands.CreateWeatherForecastCommand;
 using EmployeeManager.Extensions;
-using EmployeeManager.Filters;
+using MediatR;
 
 namespace EmployeeManager.Endpoints.WeatherForecast;
 
@@ -19,11 +18,11 @@ public static class CreateWeatherForecastEndpoint
 	private static async Task<CreateWeatherForecastCommandResult> CreateWeatherForecast
 	(
 		CreateWeatherForecastCommand request,
-		ICommandHandler<CreateWeatherForecastCommand, CreateWeatherForecastCommandResult> commandHandler,
+		ISender mediator,
 		CancellationToken cancellationToken
 	)
 	{
-		var result = await commandHandler.HandleAsync(request, cancellationToken);
+		var result = await mediator.Send(request, cancellationToken);
 
 		return result;
 	}

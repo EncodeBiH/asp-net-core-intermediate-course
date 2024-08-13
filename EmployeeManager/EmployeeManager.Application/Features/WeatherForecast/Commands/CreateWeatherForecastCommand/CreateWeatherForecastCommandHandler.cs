@@ -1,14 +1,12 @@
-﻿using EmployeeManager.Database;
-
-namespace EmployeeManager.Application.Features.WeatherForecast.Commands.CreateWeatherForecastCommand;
+﻿namespace EmployeeManager.Application.Features.WeatherForecast.Commands.CreateWeatherForecastCommand;
 
 public class CreateWeatherForecastCommandHandler : ICommandHandler<CreateWeatherForecastCommand, CreateWeatherForecastCommandResult>
 {
-	private readonly ApplicationDbContext _applicationDbContext;
+	private readonly IApplicationDbContext _applicationDbContext;
 
 	public CreateWeatherForecastCommandHandler
 	(
-		ApplicationDbContext applicationDbContext
+		IApplicationDbContext applicationDbContext
 	)
 	{
 		ArgumentNullException.ThrowIfNull(applicationDbContext);
@@ -16,7 +14,7 @@ public class CreateWeatherForecastCommandHandler : ICommandHandler<CreateWeather
 		_applicationDbContext = applicationDbContext;
 	}
 
-	public async Task<CreateWeatherForecastCommandResult> HandleAsync(CreateWeatherForecastCommand command, CancellationToken cancellationToken = default)
+	public async Task<CreateWeatherForecastCommandResult> Handle(CreateWeatherForecastCommand command, CancellationToken cancellationToken = default)
 	{
 		var entity = new Domain.Entities.WeatherForecast.WeatherForecast(command.Date, command.TemperatureC!.Value, command.Summary);
 

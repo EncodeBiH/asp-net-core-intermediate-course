@@ -1,7 +1,7 @@
 using EmployeeManager.Application;
-using EmployeeManager.Database;
 using EmployeeManager.Endpoints.Auth;
 using EmployeeManager.Endpoints.WeatherForecast;
+using EmployeeManager.Persistence;
 using EmployeeManager.Services;
 using FluentValidation;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
@@ -54,7 +54,8 @@ builder
 
 builder
 	.Services
-	.AddApplication(builder.Configuration, "Default");
+	.AddApplication()
+	.AddPersistence(builder.Configuration, "Default");
 
 var app = builder.Build();
 

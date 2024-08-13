@@ -23,10 +23,7 @@
   <ItemGroup>
     <ProjectReference Include="..\EmployeeManager.Application\EmployeeManager.Application.csproj" />
     <ProjectReference Include="..\EmployeeManager.Domain\EmployeeManager.Domain.csproj" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <Folder Include="Queries\" />
+    <ProjectReference Include="..\EmployeeManager.Persistence\EmployeeManager.Persistence.csproj" />
   </ItemGroup>
 
 </Project>

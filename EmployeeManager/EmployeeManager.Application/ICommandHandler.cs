@@ -1,13 +1,13 @@
-﻿namespace EmployeeManager.Application;
+﻿using MediatR;
+
+namespace EmployeeManager.Application;
 
 // https://learn.microsoft.com/en-us/azure/architecture/patterns/cqrs
 
-public interface ICommandHandler<TCommand, TResponse> where TCommand : ICommand<TResponse> where TResponse : class
+public interface ICommandHandler<TCommand, TResponse> : IRequestHandler<TCommand, TResponse> where TCommand : ICommand<TResponse>
 {
-	Task<TResponse> HandleAsync(TCommand command, CancellationToken cancellationToken = default);
 }
 
-public interface ICommandHandler<TCommand> where TCommand : ICommand 
+public interface ICommandHandler<TCommand> : IRequestHandler<TCommand> where TCommand : ICommand
 {
-	Task HandleAsync(TCommand command, CancellationToken cancellationToken = default);
 }

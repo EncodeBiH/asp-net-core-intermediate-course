@@ -1,15 +1,14 @@
-﻿using EmployeeManager.Database;
-using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.EntityFrameworkCore;
 
 namespace EmployeeManager.Application.Features.WeatherForecast.Queries.GetWeatherForecastByIdQuery;
 
 internal class GetWeatherForecastByIdQueryHandler : IQueryHandler<GetWeatherForecastByIdQuery, GetWeatherForecastByIdQueryResult>
 {
-	private readonly ApplicationDbContext _applicationDbContext;
+	private readonly IApplicationDbContext _applicationDbContext;
 
 	public GetWeatherForecastByIdQueryHandler
 	(
-		ApplicationDbContext applicationDbContext
+		IApplicationDbContext applicationDbContext
 	)
 	{
 		ArgumentNullException.ThrowIfNull(applicationDbContext);
@@ -17,9 +16,11 @@ internal class GetWeatherForecastByIdQueryHandler : IQueryHandler<GetWeatherFore
 		_applicationDbContext = applicationDbContext;
 	}
 
-	public async Task<GetWeatherForecastByIdQueryResult> HandleAsync(GetWeatherForecastByIdQuery query, CancellationToken cancellationToken = default)
+	public async Task<GetWeatherForecastByIdQueryResult> Handle(GetWeatherForecastByIdQuery query, CancellationToken cancellationToken = default)
 	{
-		var result = await _applicationDbContext.WeatherForecasts.FirstOrDefaultAsync(x => x.Id == query.Id, cancellationToken: cancellationToken);
+		var result = await _applicationDbContext
+			.WeatherForecasts
+			.FirstOrDefaultAsync(x => x.Id == query.Id, cancellationToken: cancellationToken);
 
 		if (result is null)
 		{

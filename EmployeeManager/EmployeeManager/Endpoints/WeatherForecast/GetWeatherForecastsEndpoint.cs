@@ -1,6 +1,6 @@
-﻿using EmployeeManager.Application;
-using EmployeeManager.Application.Common;
+﻿using EmployeeManager.Application.Common;
 using EmployeeManager.Application.Features.WeatherForecast.Queries.GetWeatherForecastsQuery;
+using MediatR;
 
 namespace EmployeeManager.Endpoints.WeatherForecast;
 
@@ -15,9 +15,14 @@ public static class GetWeatherForecastsEndpoint
     return builder;
   }
 
-  private static async Task<GetWeatherForecastsQueryResult> GetWeatherForecast(GetWeatherForecastEndpointRequest request, IQueryHandler<GetWeatherForecastsQuery, GetWeatherForecastsQueryResult> queryHandler, CancellationToken cancellationToken)
+  private static async Task<GetWeatherForecastsQueryResult> GetWeatherForecast
+	  (
+		  GetWeatherForecastEndpointRequest request, 
+		  ISender sender, 
+		  CancellationToken cancellationToken
+		  )
   {
-	  return await queryHandler.HandleAsync(new GetWeatherForecastsQuery()
+	  var result = await sender.Send(new GetWeatherForecastsQuery()
 	  {
 		  PageNumber = request.PageNumber,
 		  PageSize = request.PageSize,
@@ -25,6 +30,8 @@ public static class GetWeatherForecastsEndpoint
 		  SortBy = request.SortBy,
 		  SortOrder = request.SortOrder
 	  }, cancellationToken);
+
+	  return result;
   }
 }
 

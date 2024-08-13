@@ -1,6 +1,7 @@
 ﻿using EmployeeManager.Application;
 using EmployeeManager.Application.Features.WeatherForecast.Commands.DeleteWeatherForecastCommand;
 using EmployeeManager.Extensions;
+using MediatR;
 
 namespace EmployeeManager.Endpoints.WeatherForecast;
 
@@ -15,9 +16,9 @@ public static class DeleteWeatherForecastEndpoint
 		return builder;
 	}
 
-	private static async Task DeleteWeatherForecast(Guid id, ICommandHandler<DeleteWeatherForecastCommand> commandHandler)
+	private static async Task DeleteWeatherForecast(Guid id, ISender sender)
 	{
-		await commandHandler.HandleAsync(new DeleteWeatherForecastCommand
+		await sender.Send(new DeleteWeatherForecastCommand
 		{
 			Id = id
 		});

@@ -1,22 +1,21 @@
-﻿using EmployeeManager.Database;
-using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.EntityFrameworkCore;
 
 namespace EmployeeManager.Application.Features.WeatherForecast.Commands.DeleteWeatherForecastCommand;
 
 public class DeleteWeatherForecastCommandHandler : ICommandHandler<DeleteWeatherForecastCommand>
 {
-	private readonly ApplicationDbContext _applicationDbContext;
+	private readonly IApplicationDbContext _applicationDbContext;
 
 	public DeleteWeatherForecastCommandHandler
 	(
-		ApplicationDbContext applicationDbContext
+		IApplicationDbContext applicationDbContext
 	)
 	{
 		ArgumentNullException.ThrowIfNull(applicationDbContext);
 
 		_applicationDbContext = applicationDbContext;
 	}
-	public async Task HandleAsync(DeleteWeatherForecastCommand command, CancellationToken cancellationToken = default)
+	public async Task Handle(DeleteWeatherForecastCommand command, CancellationToken cancellationToken = default)
 	{
 		var entity = await _applicationDbContext
 			.WeatherForecasts

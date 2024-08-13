@@ -14,4 +14,6 @@ public class GetWeatherForecastsQueryResultWeatherForecast
 	public int TemperatureC { get; set; }
 
 	public string Summary { get; set; }
+
+	public DateOnly Date { get; set; }
 }

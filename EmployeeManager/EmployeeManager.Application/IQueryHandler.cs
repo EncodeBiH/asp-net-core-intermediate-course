@@ -1,6 +1,7 @@
-﻿namespace EmployeeManager.Application;
+﻿using MediatR;
 
-public interface IQueryHandler<TQuery, TReponse> where TQuery : IQuery<TReponse>
+namespace EmployeeManager.Application;
+
+public interface IQueryHandler<TQuery, TReponse> : IRequestHandler<TQuery, TReponse> where TQuery : IQuery<TReponse>
 {
-	Task<TReponse> HandleAsync(TQuery query, CancellationToken cancellationToken = default);
 }

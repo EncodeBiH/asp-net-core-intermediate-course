@@ -1,7 +1,7 @@
 ﻿using EmployeeManager.Application;
 using EmployeeManager.Application.Features.WeatherForecast.Commands.UpdateWeatherForecastCommand;
-using EmployeeManager.Database;
 using EmployeeManager.Filters;
+using MediatR;
 
 namespace EmployeeManager.Endpoints.WeatherForecast;
 
@@ -20,15 +20,16 @@ public static class UpdateWeatherForecastEndpoint
 	(
 		Guid id,
 		UpdateWeatherForecastRequest request,
-		ICommandHandler<UpdateWeatherForecastCommand, UpdateWeatherForecastCommandResult> commandHandler
+		ISender sender,
+		CancellationToken cancellationToken
 	)
 	{
-		var result = await commandHandler.HandleAsync(new UpdateWeatherForecastCommand
+		var result = await sender.Send(new UpdateWeatherForecastCommand
 		{
 			Id = id,
 			Summary = request.Summary,
 			TemperatureC = request.TemperatureC
-		});
+		}, cancellationToken);
 
 		return result;
 	}

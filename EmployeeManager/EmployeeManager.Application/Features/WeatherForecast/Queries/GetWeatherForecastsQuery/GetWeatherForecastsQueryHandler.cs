@@ -1,15 +1,14 @@
 ﻿using EmployeeManager.Application.Common;
-using EmployeeManager.Database;
 using Microsoft.EntityFrameworkCore;
 
 namespace EmployeeManager.Application.Features.WeatherForecast.Queries.GetWeatherForecastsQuery;
 public class GetWeatherForecastsQueryHandler : IQueryHandler<GetWeatherForecastsQuery, GetWeatherForecastsQueryResult>
 {
-	private readonly ApplicationDbContext _applicationDbContext;
+	private readonly IApplicationDbContext _applicationDbContext;
 
 	public GetWeatherForecastsQueryHandler
 	(
-		ApplicationDbContext applicationDbContext
+		IApplicationDbContext applicationDbContext
 	)
 	{
 		ArgumentNullException.ThrowIfNull(applicationDbContext);
@@ -17,7 +16,7 @@ public class GetWeatherForecastsQueryHandler : IQueryHandler<GetWeatherForecasts
 		_applicationDbContext = applicationDbContext;
 	}
 
-	public async Task<GetWeatherForecastsQueryResult> HandleAsync(GetWeatherForecastsQuery request, CancellationToken cancellationToken = default)
+	public async Task<GetWeatherForecastsQueryResult> Handle(GetWeatherForecastsQuery request, CancellationToken cancellationToken = default)
 	{
 		var query = _applicationDbContext
 			.WeatherForecasts
@@ -32,7 +31,8 @@ public class GetWeatherForecastsQueryHandler : IQueryHandler<GetWeatherForecasts
 			{
 				Id = x.Id,
 				Summary = x.Summary,
-				TemperatureC = x.TemperatureC
+				TemperatureC = x.TemperatureC,
+				Date = x.Date
 			})
 			.ToPagedListAsync(request.PageSize, request.PageNumber);
 
@@ -42,9 +42,11 @@ public class GetWeatherForecastsQueryHandler : IQueryHandler<GetWeatherForecasts
 		};
 	}
 
-	private static IQueryable<Domain.Entities.WeatherForecast.WeatherForecast> ApplyFiltering(
+	private static IQueryable<Domain.Entities.WeatherForecast.WeatherForecast> ApplyFiltering
+	(
 		IQueryable<Domain.Entities.WeatherForecast.WeatherForecast> query,
-		GetWeatherForecastsQuery request)
+		GetWeatherForecastsQuery request
+	)
 	{
 		if (!string.IsNullOrWhiteSpace(request.SearchTerm))
 		{
@@ -54,10 +56,12 @@ public class GetWeatherForecastsQueryHandler : IQueryHandler<GetWeatherForecasts
 		return query;
 	}
 
-	private static IQueryable<Domain.Entities.WeatherForecast.WeatherForecast> ApplySorting(
+	private static IQueryable<Domain.Entities.WeatherForecast.WeatherForecast> ApplySorting
+	(
 		IQueryable<Domain.Entities.WeatherForecast.WeatherForecast> query,
 		string sortBy,
-		string sortOrder)
+		string sortOrder
+	)
 	{
 		return sortBy switch
 		{

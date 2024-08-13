@@ -1,5 +1,6 @@
 ﻿using EmployeeManager.Application;
 using EmployeeManager.Application.Features.WeatherForecast.Queries.GetWeatherForecastByIdQuery;
+using MediatR;
 
 namespace EmployeeManager.Endpoints.WeatherForecast;
 
@@ -16,10 +17,10 @@ public static class GetWeatherForecastByIdEndpoint
 	private static async Task<GetWeatherForecastByIdQueryResult> GetWeatherForecastById
 	(
 		Guid id,
-		IQueryHandler<GetWeatherForecastByIdQuery, GetWeatherForecastByIdQueryResult> queryHandler,
+		ISender sender,
 		CancellationToken cancellationToken)
 	{
-		var forecast = await queryHandler.HandleAsync(new GetWeatherForecastByIdQuery()
+		var forecast = await sender.Send(new GetWeatherForecastByIdQuery()
 		{
 			Id = id
 		}, cancellationToken);
